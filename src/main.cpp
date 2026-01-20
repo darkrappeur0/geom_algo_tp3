@@ -24,12 +24,12 @@ int main(int argc, char *argv[]){
     geomAlgoLib::writeOFF(myMesh,"output.off");
 
 
-    std::vector<double> tab = geomAlgoLib::aire_calcul(myMesh);
+    geomAlgoLib::FacetDoubleMap tab = geomAlgoLib::aire_calcul(myMesh);
 	std::cout << "apres le calcul de l'aire au carrée" << std::endl;
     unsigned c = 0;
-    for ( auto i = tab.begin();i<tab.end();++i){
+    for ( auto i = tab.begin();i!=tab.end();++i){
         c=c+1;
-        std::cout << "aire a la " << c << "-eme valeur " <<*i << std::endl;
+        std::cout << "aire a la " << c << "-eme valeur " <<i->second << std::endl;
         
     }
     //std::cout << "tableau des aires" << tab << std::endl;

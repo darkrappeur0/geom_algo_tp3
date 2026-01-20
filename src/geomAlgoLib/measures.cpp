@@ -33,18 +33,18 @@ namespace geomAlgoLib
         r2 = std::sqrt(r2);
         return r1+r2;
     }
-    std::vector<double> aire_calcul(const Mesh &mesh){
+    FacetDoubleMap aire_calcul(const Mesh &mesh){
         
-        std::vector<double> tab;
+        FacetDoubleMap tab;
         for (FacetCstIt i = mesh.facets_begin(); i != mesh.facets_end(); ++i)
 	    {
 
             if (i->is_triangle()){
-                tab.push_back(calcul_air_triangle(i));
+                tab[i] = calcul_air_triangle(i);
             }
             else{
                 if (i->is_quad()){
-                    tab.push_back(calcul_quad(i));
+                    tab[i] = calcul_quad(i);
                 }
                 else{
                     throw std::runtime_error("Face ni triangle ni quadrilatère");
