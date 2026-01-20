@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/mainApp.dir/main.o -o mainApp   -L/home/local.isima.fr/machutaux/shared/tpnotergeoalgo/tp3/geom_algo_tp3/src/build/geomAlgoLib  geomAlgoLib/libgeomAlgoLib.a -lCGAL::CGAL 
