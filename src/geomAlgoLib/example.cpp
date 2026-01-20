@@ -32,6 +32,7 @@ int computeGenus(const Mesh &mesh)
 
 	unsigned int euler = nbVerts - nbEdges + nbFaces;
 	unsigned int genus = (2 - euler) / 2;
+	
 
 	return genus;
 }
