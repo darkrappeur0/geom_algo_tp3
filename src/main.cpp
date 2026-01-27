@@ -29,9 +29,16 @@ int main(int argc, char *argv[]){
     unsigned c = 0;
     for ( auto i = tab.begin();i!=tab.end();++i){
         c=c+1;
-        std::cout << "aire a la " << c << "-eme valeur " <<i->second << std::endl;
+        std::cout << "aire a la " << c << "-eme valeur : " <<i->second << std::endl;
+        CGAL::Vector_3<geomAlgoLib::Kernel> v = geomAlgoLib::calcul_angle(i->first);
+        std::cout << "voici la valeur de v " << v << std::endl;
+        
         
     }
+    geomAlgoLib::StoreinFiles(myMesh,tab,"test.off");
+    
+    
+    
     //std::cout << "tableau des aires" << tab << std::endl;
     std::cout << "The end..." << std::endl;
     return 0;

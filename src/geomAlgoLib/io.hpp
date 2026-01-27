@@ -15,4 +15,6 @@ bool readOFF(const std::string& filePath, Mesh& mesh);
 /// Write a mesh at location "filePath"
 void writeOFF(const Mesh& mesh, const std::string& filePath);
 
+void StoreinFiles(const Mesh& mesh,const FacetDoubleMap & calcul, const std::string& filePath );
+
 }
