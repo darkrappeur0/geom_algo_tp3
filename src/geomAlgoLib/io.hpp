@@ -17,4 +17,8 @@ void writeOFF(const Mesh& mesh, const std::string& filePath);
 
 void StoreinFiles(const Mesh& mesh,const FacetDoubleMap & calcul, const std::string& filePath );
 
+double calcul_couleur_mesh(const double& second);
+
+void StoreinFiles_labels(const Mesh& mesh,const FacetStringMap & tab1,const FacetDoubleMap & tab2 ,const std::string& filePath );
+
 }

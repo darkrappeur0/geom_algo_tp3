@@ -7,7 +7,10 @@ namespace geomAlgoLib
         HalfedgeCstIt edges_2 = edges_1->next();
         HalfedgeCstIt edges_3 = edges_2->next();
         
-        double r = CGAL::squared_area(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point());
+        double r =0.0;
+        if(!CGAL::collinear(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point())){
+            r = CGAL::squared_area(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point());
+        }
         r = std::sqrt(r);
         return r; 
     }
@@ -17,22 +20,32 @@ namespace geomAlgoLib
         HalfedgeCstIt edges_3 = edges_2->next();
         HalfedgeCstIt edges_4 = edges_3->next();
 
-        double r1 = CGAL::squared_area(
-        edges_1->vertex()->point(),
-        edges_2->vertex()->point(),
-        edges_3->vertex()->point()
-        );
+        double r1 = 0.0; 
+        if (!CGAL::collinear(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point())){
+            r1 = CGAL::squared_area(
+            edges_1->vertex()->point(),
+            edges_2->vertex()->point(),
+            edges_3->vertex()->point()
+            );
+        }
+        
 
 
-    double r2 = CGAL::squared_area(
+    double r2 = 0.0 ;
+    if (!CGAL::collinear(edges_3->vertex()->point(),edges_4->vertex()->point(),edges_1->vertex()->point())){
+        r2 = CGAL::squared_area(
         edges_3->vertex()->point(),
         edges_4->vertex()->point(),
         edges_1->vertex()->point()
     );
+        
+    }
         r1 = std::sqrt(r1);
         r2 = std::sqrt(r2);
         return r1+r2;
     }
+    
+
     FacetDoubleMap aire_calcul(const Mesh &mesh){
         
         FacetDoubleMap tab;
@@ -40,7 +53,10 @@ namespace geomAlgoLib
 	    {
 
             if (i->is_triangle()){
+                
                 tab[i] = calcul_air_triangle(i);
+                
+                
             }
             else{
                 if (i->is_quad()){
@@ -78,6 +94,26 @@ namespace geomAlgoLib
 
     return v;
 
+   }
+
+   FacetStringMap etiquettage(const FacetDoubleMap &tab){
+    FacetStringMap res;
+    for(auto i = tab.begin(); i != tab.end(); ++i){
+        if (i->second > 0.5){
+            res[i->first] = "Grande Face";
+        }
+        else{
+            res[i->first] = "Petite Face";
+        }
+        CGAL::Vector_3<Kernel> n = calcul_normal(i->first);
+        n = n / std::sqrt(n.squared_length());
+        if( ( n.z() > 0.98 ) & (res[i->first] == "Grande Face")){
+            res[i->first] = "orientées vers le haut";
+        }
+            
+        
+    }
+    return res;
    }
 
 

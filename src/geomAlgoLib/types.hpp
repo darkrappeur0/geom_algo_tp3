@@ -18,5 +18,6 @@ using HalfedgeFacetCstCirc = Mesh::Halfedge_around_facet_const_circulator;
 
 using FacetDoubleMap = std::map<Mesh::Facet_const_handle, double>;
 using FacetIntMap = std::map<Mesh::Facet_const_handle, int>;
+using FacetStringMap = std::map<Mesh::Facet_const_handle, std::string>;
 
 }

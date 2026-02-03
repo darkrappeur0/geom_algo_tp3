@@ -36,8 +36,15 @@ int main(int argc, char *argv[]){
         
     }
     geomAlgoLib::StoreinFiles(myMesh,tab,"test.off");
+
+    geomAlgoLib::FacetStringMap res = geomAlgoLib::etiquettage(tab);
+    c = 0;
+    for(auto i = res.begin();i!=res.end();++i){
+        c=c+1;
+        std::cout << "etiquette de la " << c << "-eme face : " <<i->second << " et son aire : " << tab[i->first] << std::endl;
+    }
     
-    
+    geomAlgoLib::StoreinFiles_labels(myMesh,res,tab,"etiquettes.off");
     
     //std::cout << "tableau des aires" << tab << std::endl;
     std::cout << "The end..." << std::endl;
