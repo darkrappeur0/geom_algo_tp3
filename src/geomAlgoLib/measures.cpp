@@ -1,5 +1,6 @@
 #include "measures.hpp"
 #include <cmath>
+#include <exception>
 namespace geomAlgoLib
 {
     double calcul_air_triangle(const FacetCstIt &f) {
@@ -8,9 +9,27 @@ namespace geomAlgoLib
         HalfedgeCstIt edges_3 = edges_2->next();
         
         double r =0.0;
-        if(!CGAL::collinear(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point())){
+        std::cout << "Je suis un triangle" << std::endl;
+        try{
+            if(!CGAL::collinear(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point() ) ){
             r = CGAL::squared_area(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point());
+            }
+            
         }
+        catch(const CGAL::Precondition_exception &e){
+            r=0.0;
+        }
+        /*
+        try{
+            CGAL::Triangle_3<Kernel> t(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point());
+            if (!t.is_degenerate()){
+                r = std::sqrt(t.squared_area());
+            }
+        }
+        catch(const CGAL::Precondition_exception &e){
+            r=0.0;
+        }*/
+        
         r = std::sqrt(r);
         return r; 
     }
@@ -21,25 +40,45 @@ namespace geomAlgoLib
         HalfedgeCstIt edges_4 = edges_3->next();
 
         double r1 = 0.0; 
-        if (!CGAL::collinear(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point())){
-            r1 = CGAL::squared_area(
-            edges_1->vertex()->point(),
-            edges_2->vertex()->point(),
-            edges_3->vertex()->point()
-            );
+        double r2 = 0.0 ;
+        std::cout << "Je suis un carré" << std::endl;
+        try{
+            if (!CGAL::collinear(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point())){
+                r1 = CGAL::squared_area(
+                edges_1->vertex()->point(),
+                edges_2->vertex()->point(),
+                edges_3->vertex()->point()
+                );
+            }
+        
+            if (!CGAL::collinear(edges_3->vertex()->point(),edges_4->vertex()->point(),edges_1->vertex()->point())){
+                r2 = CGAL::squared_area(
+                edges_3->vertex()->point(),
+                edges_4->vertex()->point(),
+                edges_1->vertex()->point()
+                );
+            }
         }
-        
-
-
-    double r2 = 0.0 ;
-    if (!CGAL::collinear(edges_3->vertex()->point(),edges_4->vertex()->point(),edges_1->vertex()->point())){
-        r2 = CGAL::squared_area(
-        edges_3->vertex()->point(),
-        edges_4->vertex()->point(),
-        edges_1->vertex()->point()
-    );
-        
-    }
+        catch (const CGAL::Precondition_exception & e){
+            r1=0.0;
+            r2=0.0;
+        } /*
+        try{
+            CGAL::Triangle_3<Kernel> t1(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point());
+            if (!t1.is_degenerate()){
+                r1 = std::sqrt(t1.squared_area());
+            }
+            CGAL::Triangle_3<Kernel> t2(edges_3->vertex()->point(),edges_4->vertex()->point(),edges_1->vertex()->point());
+            if (!t2.is_degenerate()){
+                r2 = std::sqrt(t2.squared_area());
+            }
+            
+        }
+        catch(const CGAL::Precondition_exception &e){
+            r1=0.0;
+            r2 = 0.0;
+        }
+        */
         r1 = std::sqrt(r1);
         r2 = std::sqrt(r2);
         return r1+r2;
