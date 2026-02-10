@@ -9,16 +9,17 @@ namespace geomAlgoLib
         HalfedgeCstIt edges_3 = edges_2->next();
         
         double r =0.0;
+        const auto& p = edges_1->vertex()->point();
+        const auto& q = edges_2->vertex()->point();
+        const auto& s = edges_3->vertex()->point();
+        CGAL::Vector_3<Kernel> pq = q - p;
+        CGAL::Vector_3<Kernel> ps = s - p;
         std::cout << "Je suis un triangle" << std::endl;
-        try{
-            if(!CGAL::collinear(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point() ) ){
-            r = CGAL::squared_area(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point());
-            }
+        
+        if(!CGAL::collinear(p,q,s) ){
+            r =std::sqrt(CGAL::cross_product(pq, ps).squared_length()) * 0.5;
+        }
             
-        }
-        catch(const CGAL::Precondition_exception &e){
-            r=0.0;
-        }
         /*
         try{
             CGAL::Triangle_3<Kernel> t(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point());
@@ -30,7 +31,7 @@ namespace geomAlgoLib
             r=0.0;
         }*/
         
-        r = std::sqrt(r);
+        //r = std::sqrt(r);
         return r; 
     }
     double calcul_quad(const FacetCstIt &i) {
@@ -38,6 +39,10 @@ namespace geomAlgoLib
         HalfedgeCstIt edges_2 = edges_1->next();
         HalfedgeCstIt edges_3 = edges_2->next();
         HalfedgeCstIt edges_4 = edges_3->next();
+        const auto& p = edges_1->vertex()->point();
+        const auto& q = edges_2->vertex()->point();
+        const auto& s = edges_3->vertex()->point();
+        const auto& t = edges_4->vertex()->point();
 
         double r1 = 0.0; 
         double r2 = 0.0 ;
