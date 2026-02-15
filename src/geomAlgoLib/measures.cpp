@@ -145,7 +145,7 @@ namespace geomAlgoLib
 
     double verticalite = n.z();   // produit scalaire avec (0,0,1)
 
-    return (verticalite > 0.9);
+    return (verticalite >= 0.9);
     }      
 
     bool est_obstacle(const FacetCstIt& f)
@@ -158,7 +158,7 @@ namespace geomAlgoLib
 
     double verticalite = std::abs(n.z());
 
-    if(verticalite < 0.6)
+    if(verticalite < 0.9)
         return true;
 
     return false;
@@ -190,7 +190,7 @@ namespace geomAlgoLib
    FacetStringMap etiquettage(const FacetDoubleMap &tab){
     FacetStringMap res;
     for(auto i = tab.begin(); i != tab.end(); ++i){
-        if (i->second > 0.0010){
+        if (i->second > 0.0005){
             res[i->first] = "Grande Face";
         }
         else{
