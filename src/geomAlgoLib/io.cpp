@@ -162,11 +162,11 @@ void StoreinFiles_labels(const Mesh& mesh,const FacetStringMap & tab1,const Face
 		} while (++j != i->first->facet_begin());
 			
 		}
-			
+			in_myfile << std::endl;
 			
 		}
 		
-		in_myfile << std::endl;
+		
 	
 
 	in_myfile.close();
