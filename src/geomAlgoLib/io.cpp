@@ -138,24 +138,28 @@ void StoreinFiles_labels(const Mesh& mesh,const FacetStringMap & tab1,const Face
 		} 
 		while (++j != i->first->facet_begin());
 		if (i->second == "Grande Face"){
-			in_myfile << ' ' << 0 << ' ' << 255 << ' ' << 0  ;
+			in_myfile << ' ' << 255 << ' ' << 255 << ' ' << 255  ;
 			
 		}
+		else if(i->second == "orientées vers le haut"){
+			in_myfile << ' ' << 0 << ' ' << 0 << ' ' << 255;
+		}	
+		else if(i->second == "obstacle"){
+			in_myfile << ' ' << 255 << ' ' << 0 << ' ' << 0;
+		}
+		else if(i->second == "a portee"){
+			in_myfile << ' ' << 191 << ' ' << 239 << ' ' << 255;
+		}
 		else{
-
-			if(i->second == "orientées vers le haut"){
-				in_myfile << ' ' << 0 << ' ' << 0 << ' ' << 255;
-			}
-			else{
-			do
-			{
-			int c = geomAlgoLib::calcul_couleur_mesh(tab2.at(i->first));
+		do
+		{
+		int c = geomAlgoLib::calcul_couleur_mesh(tab2.at(i->first));
 			
 			
-			in_myfile << ' ' << c  ;
+		in_myfile << ' ' << c  ;
 			
 
-			} while (++j != i->first->facet_begin());
+		} while (++j != i->first->facet_begin());
 			
 		}
 			
@@ -163,7 +167,7 @@ void StoreinFiles_labels(const Mesh& mesh,const FacetStringMap & tab1,const Face
 		}
 		
 		in_myfile << std::endl;
-	}
+	
 
 	in_myfile.close();
 
