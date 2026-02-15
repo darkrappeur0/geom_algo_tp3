@@ -135,7 +135,7 @@ namespace geomAlgoLib
     return v;
 
    }
-   bool est_zone_marche(const FacetCstIt& f, double aire)
+   bool est_zone_marche(const FacetCstIt& f)
     {
     CGAL::Vector_3<Kernel> n = calcul_normal(f);
     double norm = std::sqrt(n.squared_length());
@@ -145,10 +145,10 @@ namespace geomAlgoLib
 
     double verticalite = n.z();   // produit scalaire avec (0,0,1)
 
-    return (verticalite > 0.9 && aire > 0.2);
+    return (verticalite > 0.9);
     }      
 
-    bool est_obstacle(const FacetCstIt& f, double aire)
+    bool est_obstacle(const FacetCstIt& f)
     {
     CGAL::Vector_3<Kernel> n = calcul_normal(f);
     double norm = std::sqrt(n.squared_length());
@@ -158,12 +158,7 @@ namespace geomAlgoLib
 
     double verticalite = std::abs(n.z());
 
-    // fortement inclinée
-    if(verticalite < 0.4)
-        return true;
-
-    // grande face verticale
-    if(verticalite < 0.6 && aire > 1.0)
+    if(verticalite < 0.6)
         return true;
 
     return false;
@@ -182,7 +177,7 @@ namespace geomAlgoLib
         (p.z() + q.z() + r.z())/3.0
     );
 
-    Kernel::Point_3 avatar(0.0, 0.0, 1.0);
+    Kernel::Point_3 avatar(3.0, 3.0, 0.0);
 
     double dist2 = CGAL::squared_distance(bary, avatar);
 
@@ -195,7 +190,7 @@ namespace geomAlgoLib
    FacetStringMap etiquettage(const FacetDoubleMap &tab){
     FacetStringMap res;
     for(auto i = tab.begin(); i != tab.end(); ++i){
-        if (i->second > 0.5){
+        if (i->second > 0.0010){
             res[i->first] = "Grande Face";
         }
         else{
@@ -204,13 +199,13 @@ namespace geomAlgoLib
         
         CGAL::Vector_3<Kernel> n = calcul_normal(i->first);
         n = n / std::sqrt(n.squared_length());
-        if( est_zone_marche(i->first,i->second) & (res[i->first] == "Grande Face")){
+        if( est_zone_marche(i->first) & (res[i->first] == "Grande Face")){
             res[i->first] = "orientées vers le haut";
         }
-        else if( est_obstacle(i->first,i->second) & (res[i->first] == "Grande Face")){
+        else if( est_obstacle(i->first) ){
             res[i->first] = "obstacle";
         }
-        else if( est_a_portee(i->first) & (res[i->first] == "Grande Face")){
+        if( est_a_portee(i->first) ){
             res[i->first] = "a portee";
         }
 

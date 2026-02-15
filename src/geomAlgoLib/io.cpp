@@ -98,13 +98,7 @@ void StoreinFiles(const Mesh& mesh,const FacetDoubleMap & tab, const std::string
 
 
 double calcul_couleur_mesh(const double& second){
-	int c = 0;
-    if(second > 1 ){
-		c = 255 / second;
-	}
-	else{
-		c = 255 / (second + 1);   // a retravailler peut poser problème
-	}
+	int c = 255 / (second + 1);   
 	return c;
    }
 
