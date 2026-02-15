@@ -208,15 +208,62 @@ namespace geomAlgoLib
         if( est_a_portee(i->first) ){
             res[i->first] = "a portee";
         }
-
-
-        
-            
-        
     }
     return res;
    }
 
+   double calcul_angle_min_face(const FacetCstIt& f)
+{
+    HalfedgeCstIt h = f->halfedge();
+    HalfedgeCstIt start = h;
+
+    double angle_min = std::numeric_limits<double>::max();
+
+    do
+    {
+        // Points
+        const auto& p_prev = h->prev()->vertex()->point();
+        const auto& p      = h->vertex()->point();
+        const auto& p_next = h->next()->vertex()->point();
+
+        // Vecteurs des deux arêtes adjacentes au sommet p
+        CGAL::Vector_3<Kernel> v1 = p_prev - p;
+        CGAL::Vector_3<Kernel> v2 = p_next - p;
+
+        double norm1 = std::sqrt(v1.squared_length());
+        double norm2 = std::sqrt(v2.squared_length());
+
+        if(norm1 > 0.0 && norm2 > 0.0)
+        {
+            double cos_theta = (v1 * v2) / (norm1 * norm2);
+
+            
+            cos_theta = std::max(-1.0, std::min(1.0, cos_theta));
+
+            double angle = std::acos(cos_theta);
+
+            angle_min = std::min(angle_min, angle);
+        }
+
+        h = h->next();
+
+    } while(h != start);
+
+    double rad_to_deg = 180.0 / CGAL_PI;
+    return angle_min * rad_to_deg;
+
+}
+FacetDoubleMap angle_min_calcul(const Mesh &mesh)
+{
+    FacetDoubleMap tab;
+
+    for (FacetCstIt i = mesh.facets_begin(); i != mesh.facets_end(); ++i)
+    {
+        tab[i] = calcul_angle_min_face(i);
+    }
+
+    return tab;
+}
 
 
 }

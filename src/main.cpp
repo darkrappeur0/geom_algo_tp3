@@ -37,12 +37,25 @@ int main(int argc, char *argv[]){
     }
     geomAlgoLib::StoreinFiles(myMesh,tab,"test.off");
 
+    geomAlgoLib::FacetDoubleMap angle = geomAlgoLib::angle_min_calcul(myMesh);
+
+    c=0;
+
+    for(auto i = angle.begin();i!=angle.end();++i){
+        c=c+1;
+        std::cout << "plus petit angle en degrés de la " << c << "-eme face : " <<i->second << " et son aire : " << tab[i->first] << std::endl;
+    }
+
     geomAlgoLib::FacetStringMap res = geomAlgoLib::etiquettage(tab);
+    
     c = 0;
     for(auto i = res.begin();i!=res.end();++i){
         c=c+1;
         std::cout << "etiquette de la " << c << "-eme face : " <<i->second << " et son aire : " << tab[i->first] << std::endl;
     }
+    
+
+    
     
     geomAlgoLib::StoreinFiles_labels(myMesh,res,tab,"etiquettes.off");
     
