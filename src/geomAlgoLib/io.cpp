@@ -142,7 +142,7 @@ void StoreinFiles_labels(const Mesh& mesh,const FacetStringMap & tab1,const Face
 			in_myfile << ' ' << 255 << ' ' << 0 << ' ' << 0;
 		}
 		else if(i->second == "a portee"){
-			in_myfile << ' ' << 191 << ' ' << 239 << ' ' << 255;
+			in_myfile << ' ' << 0 << ' ' << 255 << ' ' << 0;
 		}
 		else{
 		do
