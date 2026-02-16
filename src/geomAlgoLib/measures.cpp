@@ -172,20 +172,19 @@ FacetDoubleMap aire_calcul(const Mesh &mesh){
 
 
 
-
-   bool est_zone_marche(const FacetCstIt& f)
-    {
-    CGAL::Vector_3<Kernel> n = calcul_normal(f);
-    double norm = std::sqrt(n.squared_length());
-    if(norm == 0.0) return false;
-
-    n = n / norm;
-
-    double verticalite = n.z();   // produit scalaire avec (0,0,1)
-
-    return (verticalite >= 0.9);
-    }      
-
+bool est_zone_marche(const FacetCstIt& f)
+{
+    CGAL::Vector_3<Kernel> angles = calcul_angle(f);
+    
+    
+    if (angles.x() == 0 && angles.y() == 0 && angles.z() == 0)
+        return false;
+    
+    double theta_z_deg = CGAL::to_double(angles.z());
+    
+    
+    return (theta_z_deg <= 25.84);
+}
 
     bool est_obstacle(const FacetCstIt& f)
     {
