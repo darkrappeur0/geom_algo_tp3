@@ -3,6 +3,14 @@
 #include <exception>
 namespace geomAlgoLib
 {
+    /*
+    
+    
+    Code non utiliser, présent si vous voulez voir le précédent code utilisé
+    A décommenter si vous voulez les tester
+    
+    */
+    /*
     double calcul_air_triangle(const FacetCstIt &f) {
         HalfedgeCstIt edges_1 = f->halfedge();
         HalfedgeCstIt edges_2 = edges_1->next();
@@ -19,21 +27,11 @@ namespace geomAlgoLib
         if(!CGAL::collinear(p,q,s) ){
             r =std::sqrt(CGAL::cross_product(pq, ps).squared_length()) * 0.5;
         }
-            
-        /*
-        try{
-            CGAL::Triangle_3<Kernel> t(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point());
-            if (!t.is_degenerate()){
-                r = std::sqrt(t.squared_area());
-            }
-        }
-        catch(const CGAL::Precondition_exception &e){
-            r=0.0;
-        }*/
-        
-        //r = std::sqrt(r);
         return r; 
     }
+        */
+
+    /*    
     double calcul_quad(const FacetCstIt &i) {
         HalfedgeCstIt edges_1 = i->halfedge();
         HalfedgeCstIt edges_2 = edges_1->next();
@@ -63,29 +61,14 @@ namespace geomAlgoLib
         catch (const CGAL::Precondition_exception & e){
             r1=0.0;
             r2=0.0;
-        } /*
-        try{
-            CGAL::Triangle_3<Kernel> t1(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point());
-            if (!t1.is_degenerate()){
-                r1 = std::sqrt(t1.squared_area());
-            }
-            CGAL::Triangle_3<Kernel> t2(edges_3->vertex()->point(),edges_4->vertex()->point(),edges_1->vertex()->point());
-            if (!t2.is_degenerate()){
-                r2 = std::sqrt(t2.squared_area());
-            }
-            
         }
-        catch(const CGAL::Precondition_exception &e){
-            r1=0.0;
-            r2 = 0.0;
-        }
-        */
         r1 = std::sqrt(r1);
         r2 = std::sqrt(r2);
         return r1+r2;
     }
+        */
     
-
+    /*
     FacetDoubleMap aire_calcul(const Mesh &mesh){
         
         FacetDoubleMap tab;
@@ -111,6 +94,56 @@ namespace geomAlgoLib
 	    }
         return tab;
    } 
+        */
+
+
+    double calcul_air_face(const FacetCstIt &f)
+{
+    HalfedgeCstIt h = f->halfedge();
+    HalfedgeCstIt start = h;
+
+    // Point pivot
+    const auto& p0 = h->vertex()->point();
+
+    h = h->next();
+
+    double aire_totale = 0.0;
+
+    while(h->next() != start)
+    {
+        const auto& p1 = h->vertex()->point();
+        const auto& p2 = h->next()->vertex()->point();
+
+        if(!CGAL::collinear(p0, p1, p2))
+        {
+            CGAL::Vector_3<Kernel> v1 = p1 - p0;
+            CGAL::Vector_3<Kernel> v2 = p2 - p0;
+
+            double aire_triangle =
+                std::sqrt(CGAL::cross_product(v1, v2).squared_length()) * 0.5;
+
+            aire_totale += aire_triangle;
+        }
+
+        h = h->next();
+    }
+
+    return aire_totale;
+}
+
+
+FacetDoubleMap aire_calcul(const Mesh &mesh){
+        
+        FacetDoubleMap tab;
+        for (FacetCstIt i = mesh.facets_begin(); i != mesh.facets_end(); ++i)
+	    {
+
+            tab[i] = calcul_air_face(i);
+		        
+	    }
+        return tab;
+   } 
+
 
    CGAL::Vector_3<Kernel> calcul_normal(const FacetCstIt &f){
         HalfedgeCstIt edges_1 = f->halfedge();
@@ -118,6 +151,8 @@ namespace geomAlgoLib
         HalfedgeCstIt edges_3 = edges_2->next();
         return CGAL::normal(edges_1->vertex()->point(),edges_2->vertex()->point(),edges_3->vertex()->point());
    }
+
+
    CGAL::Vector_3<Kernel> calcul_angle(const FacetCstIt &f){
     CGAL::Vector_3<Kernel> n = calcul_normal(f);
     n = n / std::sqrt(n.squared_length());
@@ -133,8 +168,11 @@ namespace geomAlgoLib
     CGAL::Vector_3<Kernel> v{Kernel::FT(theta_x), Kernel::FT(theta_y), Kernel::FT(theta_z)};
 
     return v;
-
    }
+
+
+
+
    bool est_zone_marche(const FacetCstIt& f)
     {
     CGAL::Vector_3<Kernel> n = calcul_normal(f);
@@ -147,6 +185,7 @@ namespace geomAlgoLib
 
     return (verticalite >= 0.9);
     }      
+
 
     bool est_obstacle(const FacetCstIt& f)
     {
@@ -163,6 +202,8 @@ namespace geomAlgoLib
 
     return false;
     }
+
+
     bool est_a_portee(const FacetCstIt& f)
     {
     HalfedgeCstIt h = f->halfedge();
@@ -183,8 +224,6 @@ namespace geomAlgoLib
 
     return dist2 < 4.0; // distance < 2
     }
-
-
 
 
    FacetStringMap etiquettage(const FacetDoubleMap &tab){
@@ -211,6 +250,7 @@ namespace geomAlgoLib
     }
     return res;
    }
+
 
    double calcul_angle_min_face(const FacetCstIt& f)
 {
@@ -253,6 +293,8 @@ namespace geomAlgoLib
     return angle_min * rad_to_deg;
 
 }
+
+
 FacetDoubleMap angle_min_calcul(const Mesh &mesh)
 {
     FacetDoubleMap tab;
