@@ -186,21 +186,19 @@ bool est_zone_marche(const FacetCstIt& f)
     return (theta_z_deg <= 25.84);
 }
 
-    bool est_obstacle(const FacetCstIt& f)
-    {
-    CGAL::Vector_3<Kernel> n = calcul_normal(f);
-    double norm = std::sqrt(n.squared_length());
-    if(norm == 0.0) return false;
-
-    n = n / norm;
-
-    double verticalite = std::abs(n.z());
-
-    if(verticalite < 0.9)
-        return true;
-
-    return false;
-    }
+  bool est_obstacle(const FacetCstIt& f)
+{
+    CGAL::Vector_3<Kernel> angles = calcul_angle(f);
+    
+    
+    if (angles.x() == 0 && angles.y() == 0 && angles.z() == 0)
+        return false;
+    
+    double theta_z_deg = CGAL::to_double(angles.z());
+    
+    
+    return (theta_z_deg > 25.84 );
+}
 
 
     bool est_a_portee(const FacetCstIt& f)
@@ -240,12 +238,13 @@ bool est_zone_marche(const FacetCstIt& f)
         if( est_zone_marche(i->first) & (res[i->first] == "Grande Face")){
             res[i->first] = "orientées vers le haut";
         }
-        else if( est_obstacle(i->first) ){
+        if( est_obstacle(i->first) ){
             res[i->first] = "obstacle";
         }
         if( est_a_portee(i->first) ){
             res[i->first] = "a portee";
         }
+        
     }
     return res;
    }
