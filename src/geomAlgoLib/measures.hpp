@@ -31,5 +31,6 @@ namespace geomAlgoLib
 
     double calcul_angle_min_face(const FacetCstIt& f);
     FacetDoubleMap angle_min_calcul(const Mesh &mesh);
+    void remove_degenerate_faces(Mesh &mesh);
 
 }

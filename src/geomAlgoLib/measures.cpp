@@ -308,4 +308,36 @@ FacetDoubleMap angle_min_calcul(const Mesh &mesh)
 }
 
 
+
+void remove_degenerate_faces(Mesh &mesh)
+{
+
+    std::vector<Mesh::Facet_iterator> to_remove;
+    
+    for (Mesh::Facet_iterator f = mesh.facets_begin(); f != mesh.facets_end(); ++f)
+    {
+        Mesh::Halfedge_handle h = f->halfedge();
+        
+        if (h->next()->next()->next() == h)
+        {
+            const auto& p0 = h->vertex()->point();
+            const auto& p1 = h->next()->vertex()->point();
+            const auto& p2 = h->next()->next()->vertex()->point();
+            
+            if (CGAL::collinear(p0, p1, p2))
+            {
+                to_remove.push_back(f);
+            }
+        }
+    }
+    
+    std::cout << "Suppression de " << to_remove.size() << " faces dégénérées..." << std::endl;
+    
+    for (auto f : to_remove)
+    {
+        mesh.erase_facet(f->halfedge());
+    }
+}
+
+
 }

@@ -17,6 +17,7 @@ int main(int argc, char *argv[]){
     geomAlgoLib::Mesh myMesh;
 
     geomAlgoLib::readOFF(meshPath, myMesh);
+    geomAlgoLib::remove_degenerate_faces(myMesh);
 
     auto genus = geomAlgoLib::computeGenus(myMesh);
     std::cout << "The Genus of [" << meshPath << "] is = " << std::to_string(genus) << std::endl;
